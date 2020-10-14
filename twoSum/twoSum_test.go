@@ -14,27 +14,17 @@ type inputPair struct {
 
 // 两数之和 https://leetcode-cn.com/problems/two-sum/
 func twoSum(nums []int, target int) []int {
+	// 先构建hash表，逻辑更清晰
 	offsets := make(map[int]int)
-	for i, j := 0, len(nums)-1; i <= j; i, j = i+1, j-1 {
-		if nums[i]+nums[j] == target {
-			return []int{i, j}
-		}
+	for i := range nums {
+		offsets[nums[i]] = i
+	}
+	// 再从头到尾查一遍
+	for i := range nums {
 		expect := target - nums[i]
-		if idx, ok := offsets[expect]; ok {
-			if idx < i {
-				return []int{idx, i}
-			}
+		if idx, ok := offsets[expect]; ok && i < idx {
 			return []int{i, idx}
 		}
-		expect = target - nums[j]
-		if idx, ok := offsets[expect]; ok {
-			if idx < i {
-				return []int{idx, j}
-			}
-			return []int{j, idx}
-		}
-		offsets[nums[i]] = i
-		offsets[nums[j]] = j
 	}
 	return []int{}
 }
